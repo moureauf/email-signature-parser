@@ -2,10 +2,28 @@ import { Hono } from 'hono'
 
 const app = new Hono()
 
+// Middleware to validate RapidAPI key
+app.use('*', async (c, next) => {
+  const key = c.req.header('X-RapidAPI-Key')
+  if (!key) {
+    console.warn('Missing X-RapidAPI-Key')
+    return c.json({ error: 'Unauthorized: Missing API key' }, 401)
+  }
+
+  // Optionally validate against a known list of keys for testing
+  const validKeys = ['test-key-123']
+  if (!validKeys.includes(key)) {
+    console.warn('Invalid API key:', key)
+    return c.json({ error: 'Unauthorized: Invalid API key' }, 403)
+  }
+
+  console.log('Received valid API key:', key)
+  await next()
+})
+
 app.post('/parse', async (c) => {
   const { text } = await c.req.json()
-
-  console.log('Received text:', text)
+  console.log('Parsing text:', text)
 
   const result = {
     name: text.match(/([A-Z][a-z]+\s[A-Z][a-z]+)/)?.[1],
@@ -15,7 +33,6 @@ app.post('/parse', async (c) => {
   }
 
   console.log('Parsed result:', result)
-
   return c.json({ result })
 })
 

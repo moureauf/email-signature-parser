@@ -11,11 +11,11 @@ app.use('*', async (c, next) => {
   }
 
   // Optionally validate against a known list of keys for testing
-  const validKeys = ['test-key-123']
-  if (!validKeys.includes(key)) {
-    console.warn('Invalid API key:', key)
-    return c.json({ error: 'Unauthorized: Invalid API key' }, 403)
-  }
+  // const validKeys = ['test-key-123']
+  // if (!validKeys.includes(key)) {
+  //   console.warn('Invalid API key:', key)
+  //   return c.json({ error: 'Unauthorized: Invalid API key' }, 403)
+  // }
 
   console.log('Received valid API key:', key)
   await next()

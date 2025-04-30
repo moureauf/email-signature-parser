@@ -1,5 +1,9 @@
 name: Deploy to Cloudflare
 
+defaults:
+  run:
+    working-directory: apps/email-signature-parser
+
 on:
   push:
     branches: [main]

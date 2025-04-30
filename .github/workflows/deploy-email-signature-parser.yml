@@ -17,6 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Clear Wrangler Cache
+        run: wrangler logout
+
       - name: Install Bun
         uses: oven-sh/setup-bun@v1
 

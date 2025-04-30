@@ -1,0 +1,14 @@
+app = "SIGPARSE_LLM_APP"  # will be replaced by GH secret
+
+[build]
+image = "ollama/ollama"
+
+[http_service]
+internal_port = 11434
+auto_start_machines = true
+auto_stop_machines = true
+min_machines_running = 0
+
+[mounts]
+source = "ollama_data"
+destination = "/root/.ollama"

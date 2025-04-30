@@ -3,6 +3,9 @@ name: Deploy to Cloudflare
 on:
   push:
     branches: [main]
+    paths:
+      - 'apps/email-signature-parser/**'
+      - '.github/workflows/deploy-email-signature-parser.yml'
 
 jobs:
   deploy:

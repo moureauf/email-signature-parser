@@ -1,0 +1,32 @@
+name: Deploy Ollama to Fly.io
+
+on:
+  push:
+    paths:
+      - 'apps/llm-server/fly.toml'
+      - '.github/workflows/deploy-llm-server.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/llm-instance
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set Fly app name
+        run: echo "FLY_APP=${{ secrets.FLY_APP_NAME }}" >> $GITHUB_ENV
+
+      - name: Replace app name in fly.toml
+        run: |
+          sed -i "s/SIGPARSE_LLM_APP/${FLY_APP}/g" fly.toml
+
+      - name: Install Fly CLI
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy to Fly.io
+        run: flyctl deploy --remote-only --app $FLY_APP
+        env:
+          FLY_DEPLOY_TOKEN: ${{ secrets.FLY_DEPLOY_TOKEN }}
